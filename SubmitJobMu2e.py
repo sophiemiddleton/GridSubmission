@@ -46,11 +46,11 @@ def grid_upload(jobname):
   subproc = subprocess.run(upload)
   return subproc
 
-def send_grid_job(jobname, memory,lifetime):
+def send_grid_job(jobname, memory,lifetime, version):
   """
   upload tarbull of job fcls to the pnfs server
   """
-  grid = "mu2eprodsys --transfer-all-files --dsconf=v0 --memory="+str(memory)+" --code="+str(tarbull)+" --fcllist=/pnfs/mu2e/scratch/users/sophie/fcllist"+str(jobname)+"_00.bz2 --expected-lifetime="+str(lifetime)
+  grid = "mu2eprodsys --transfer-all-files --dsconf="+str(version)+" --memory="+str(memory)+" --code="+str(tarbull)+" --fcllist=/pnfs/mu2e/scratch/users/sophie/fcllist"+str(jobname)+"_00.bz2 --expected-lifetime="+str(lifetime)
   subproc = subprocess.run(grid,shell=True)
   return subproc
    
@@ -59,7 +59,7 @@ def main(options, args):
   generate_fcls_staged(options.project, options.jobname, options.version, options.inputs, options.fclname, options.memory, options.lifetime)
   loop(options.jobname)
   grid_upload(options.jobname)
-  send_grid_job(options.jobname, options.memory, options.lifetime)
+  send_grid_job(options.jobname, options.memory, options.lifetime, options.version)
   
 if __name__ == "__main__":
     parser = OptionParser()
@@ -74,3 +74,4 @@ if __name__ == "__main__":
     (options, args) = parser.parse_args()
     main(options,args);
     print("Finished")
+  
